@@ -2,7 +2,7 @@
 What's your name? 
 Sam Walkes 
 
-What do you study (or hope to study)? 
+What do you study (or hope to study)?
 
 I study eco-evo dynamics occuring during poleward range expansions. 
 
