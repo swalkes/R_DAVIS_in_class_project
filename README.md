@@ -4,7 +4,7 @@ Sam Walkes
 
 What do you study (or hope to study)?
 
-I study eco-evo dynamics occuring during poleward range expansions. 
+I study eco-evo dynamics occuring during poleward range expansions.
 
 What's one interesting fact about you? 
 
