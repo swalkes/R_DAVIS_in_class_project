@@ -10,7 +10,7 @@ What's one interesting fact about you?
 
 One time my high school soccer team got beaten so badly it went viral on youtube. 
 
-![File Path](images/file_path.png)
+![File Path Image](images/file_path.png)
 
 
 
