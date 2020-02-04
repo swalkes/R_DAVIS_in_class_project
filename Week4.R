@@ -122,11 +122,15 @@ filter(surveys, plot_id == 3)
 # pipes 
 
 # I want all weights greater than 5 and only the columns species_id, sex, and weight
+surveys2 <- filter(surveys, weight > 5)
 
+surveys_smol <- select(surveys2, species_id, sex, weight)
 
-
-
-
+# pipes let you take the output of one function and pipe it into another 
+# pipe: %>% --> command + shift + m
+surveys_smol2 <- surveys %>%
+  filter(weight > 5) %>%
+  select(species_id, sex, weight)
 
 
 
