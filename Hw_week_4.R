@@ -18,10 +18,10 @@ head(challenge_base)
 
 # problem 3
 surveys2 <- read_csv("data/portal_data_joined.csv")
-surveys_tidy<- select(surveys2, species_id, hindfoot_length, year)
-surveys_tidy2 <- na.omit(surveys_tidy)
-surveys_100 <- surveys_tidy2[-c(100:nrow(surveys_tidy2)),]
-challenge_tidy <- surveys_tidy2 %>%
+surveys_tidy<- select(surveys2, species_id, hindfoot_length, year) %>%
+         filter(!is.na(hindfoot_length))
+surveys_100 <- surveys_tidy[-c(100:nrow(surveys_tidy)),]
+challenge_tidy <- surveys_tidy %>%
   filter(species_id == "RM") %>%
   filter(year == "1997")
 
