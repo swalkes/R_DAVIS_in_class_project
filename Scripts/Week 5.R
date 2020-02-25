@@ -105,9 +105,8 @@ wide_survey <- surveys_mz %>%
 longer_surveys <- wide_survey %>% 
   pivot_longer(cols = -plot_id, names_to = "genus",
                values_to = "mean_weight") 
-# "-plot_id" causes all plots except for plot_id should be collapsed into one column 
+# "-plot_id" causes all plots except for plot_id to be collapsed into one column 
   
-
 
 
 

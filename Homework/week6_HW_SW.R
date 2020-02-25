@@ -3,13 +3,12 @@
 # Problem 1
 gapminder <- read_csv("https://gge-ucd.github.io/R-DAVIS/data/gapminder.csv")
 
-gapminder_means <- gapminder %>%
+gapminder %>%
   group_by(continent, year) %>% 
-  summarise(meanlifeExp = mean(lifeExp, na.rm = TRUE))
-
-ggplot(data = gapminder_means,
-       mapping = aes (x = year, y = meanlifeExp)) + 
-  geom_point(aes(color = continent))
+  summarise(meanlifeExp = mean(lifeExp, na.rm = TRUE)) %>% 
+  ggplot(mapping = aes (x = year, y = meanlifeExp, color = continent)) + 
+  geom_point() +
+  geom_line()
 
 
 # Problem 2
