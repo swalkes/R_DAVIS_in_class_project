@@ -1,0 +1,119 @@
+---
+title: "R-Davis Final Assignment"
+author: "Sam Walkes"
+date: "3/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyr)
+library(knitr)
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(plotly)
+```
+
+
+
+```{r data, include = FALSE}
+planes <- read_csv("/Users/Walkes/downloads/nyc_13_planes.csv")
+weather <- read_csv("/Users/Walkes/downloads/nyc_13_weather.csv")
+flights <- read_csv("/Users/Walkes/downloads/nyc_13_flights_new.csv")
+```
+
+
+```{r data, include = FALSE}
+
+## joined flights and plane data by tail number
+flights_planes_joined <- left_join(flights, planes, by = "tailnum")
+
+## joined flights_planes_joined to weather using time_hour column
+flights_planes_weather <- left_join(flights_planes_joined, weather, by = "time_hour")
+
+head(flights_planes_weather)
+
+```
+
+Departure delay as a function of precipitation
+```{r}
+library(ggplot2)
+library(ggthemes)
+
+ggplot(data = flights_planes_weather, mapping = aes(x = precip, y = dep_delay, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method='lm', na.rm = TRUE) +
+  theme_bw() + 
+  labs(y = "Departure delay", x = "Precipitation")
+```
+
+Mean departure delay for each airline, across dates between September and December 2013
+```{r}
+
+flights_planes_weather$Datetime <- paste(flights_planes_weather$month.x, flights_planes_weather$day.x, sep = "-")
+
+question_2_dataset <- flights_planes_weather %>%
+  filter(month.x >= 9) %>% 
+  group_by(carrier, Datetime) %>%
+  summarize(mean_dep_delay = mean(dep_delay))
+
+
+mean_delay <- ggplot(data = question_2_dataset, mapping = aes(x = Datetime, y = mean_dep_delay, color = carrier, na.rm = TRUE)) +
+  geom_point(na.rm = TRUE) + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 75, vjust = 0.5, size = 10)) +
+  labs(y = "Mean Departure Delay", x = "Date")
+
+plotly::ggplotly(mean_delay)
+
+```
+
+
+Table with the average delay by each airport
+```{r}
+flights_planes_weather$Datetimeyear <- paste(flights_planes_weather$year.x, flights_planes_weather$month.x, flights_planes_weather$day.x, sep = "-")
+
+data_set_question3 <- flights_planes_weather %>% 
+drop_na() %>% 
+group_by(origin.x, Datetimeyear) %>%
+summarize(mean_temp = mean(temp)) %>% 
+pivot_wider(names_from = "origin.x", values_from = "mean_temp")
+
+library(knitr)
+kable(data_set_question3[], caption = "Average Delay by Date")
+
+
+
+```
+
+Plots of departure delay by manufacturer
+```{r}
+
+question_four_data <- flights_planes_weather %>%
+  mutate(rain = case_when(
+    precip > 0 ~"rain", 
+    precip == 0 ~ "clear", # Why is there a warning here?!?
+  )) %>%
+  select(manufacturer, dep_delay, rain)
+
+question_four_data <- na.omit(question_four_data)
+
+library(ggplot2)
+ggplot(data = question_four_data, mapping = aes(x = manufacturer, y = dep_delay, na.rm = TRUE)) +
+  geom_violin() +
+  geom_point(alpha = 0.01) +   
+  facet_wrap(~ rain) +
+  theme_bw() +
+  labs(y = "Departure Delay", x = "Manufacturer") +
+  theme(axis.text.x = element_text(angle = 75, vjust = 0.5, size = 5))
+
+
+
+```
+
+[Here's a cool plane](https://giphy.com/gifs/euronews-airbus-beluga-belugaxl-5t0xQjwKNWNnAm621e)
+![Here's another cool plane](images/beluga.jpeg)
+
+
+

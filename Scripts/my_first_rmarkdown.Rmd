@@ -1,0 +1,50 @@
+---
+title: "My First RMarkdown Document"
+author: "Sam Walkes"
+date: "3/3/2020"
+output: html_document
+---
+# This is a big header
+## This is a smaller header 
+
+This is just some regular text. Or some **bold** text 
+
+we can insert code chunks with "comand+option+i"
+
+Code chunk is R language. Outside the code chunk is in markdown
+
+message=FALSE supresses output message from loading the package
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+We loaded tidyverse, let's look at some data. 
+"storms" is a built in dataset 
+
+```{r}
+summary(storms)
+str(storms)
+```
+
+Let's try making a plot
+adding ",echo=FALSE" will hide the code in the chunk  
+```{r,echo=FALSE}
+storms %>%
+  ggplot(aes(x = as.factor(month), y = pressure, color = wind)) +
+  geom_jitter(alpha = 0.5)
+```
+
+
+Include a weblink: 
+
+
+
+[Link to the R markdown less](https://gge-ucd.github.io/R-DAVIS/lesson_rmarkdown.html)
+
+
+
+
+```{r}
+library(knitr)
+kable(storms[1:20,], caption = "table made with kable")
+```

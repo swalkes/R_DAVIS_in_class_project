@@ -32,7 +32,6 @@ Africa <-  gapminder_wide %>%
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 70, vjust = 0.5))
     
-  
 # Americas plot
 America <- gapminder_wide %>%
   filter(continent == "Americas") %>%
@@ -71,3 +70,27 @@ cowplot <- plot_grid(Africa, America, Asia, Europe) +
   draw_label("Country", x=0.5, y=  0, vjust=-0.5, angle= 0) +
   draw_label("Change in Population Between 2002 and 2007", x=  0, y=0.5, vjust= 1.5, angle=90)
 cowplot
+
+
+
+## could also be done in fewer lines of code:
+
+gapminder <- read_csv("data/gapminder.csv")
+
+pg <- gapminder %>% 
+  select(country, year, pop, continent) %>% 
+  filter(year > 2000) %>% 
+  pivot_wider(names_from = year, values_from = pop) %>% 
+  mutate(pop_change_0207 = `2007` - `2002`)
+
+pg %>% 
+  filter(continent != "Oceania") %>% 
+  ggplot(aes(x = reorder(country, pop_change_0207), y = pop_change_0207)) +
+  geom_col(aes(fill = continent)) +
+  facet_wrap(~continent, scales = "free") + 
+  theme_bw() +
+  scale_fill_viridis_d() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+        legend.position = "none") +
+  xlab("Country") +
+  ylab("Change in Population Between 2002 and 2007")
